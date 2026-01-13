@@ -1,5 +1,6 @@
 package com.example.startSpring;
 
+import com.example.startSpring.models.Todo;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,11 +17,11 @@ public class TodoController {
     //Get all todos
 
     @GetMapping("/all")
-    public String getTodos (){
-        return "All availabale todos";
+    public Iterable<Todo> getAllTodos(){
+        return todoService.getAllTodos();
     }
 
-    //Path Variable
+
 
     //Get Todo by id
     @GetMapping("/{todoId}")
@@ -35,16 +36,17 @@ public class TodoController {
         return "Get todo by user" + " " + user + " " + status + " " + priority;
     }
 
-    // Post create todo
-    @PostMapping("/create")
+
     public String createTodo (@RequestBody String todo){
         return "Create todo" + " " + todo;
     }
 
-    @PostMapping
-    public String addTodo(@RequestBody String task) {
-        todoService.addTodo(task);
-        return "Todo added";
+    // Post create todo
+    @PostMapping("/create")
+    public void addTodo(@RequestBody Todo todo    ) {
+
+        todoService.saveTodo(todo);
+
     }
 
 

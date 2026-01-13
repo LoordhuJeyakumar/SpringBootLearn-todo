@@ -1,22 +1,50 @@
+//package com.example.startSpring;
+//
+////Plain Java
+//public class TodoService {
+//
+//    private TodoRepository todoRepository;
+//
+//    public TodoService() {
+//        todoRepository = new TodoRepository();
+//    }
+//
+//    public void printAllTodos (){
+//        System.out.println(todoRepository.getAllTodos());
+//    }
+//
+//}
+
+
 package com.example.startSpring;
 
-
+import com.example.startSpring.models.Todo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TodoService {
 
-    private final TodoRepository todoRepository;
+    @Autowired
+    private TodoRepository todoRepository;
 
-    public TodoService(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
+    public void printAllTodos (){
+        System.out.println(todoRepository.findAll());
     }
 
-    public void addTodo(String task) {
-        if (task.isEmpty()) {
-            throw new RuntimeException("Task cannot be empty");
-        }
-        todoRepository.save(task);
+
+    public void saveTodo (Todo todo     ){
+
+        todoRepository.save(todo);
+
     }
+
+
+    //Get all todos
+    public Iterable<Todo> getAllTodos(){
+        return todoRepository.findAll();
+    }
+
 
 }
+
