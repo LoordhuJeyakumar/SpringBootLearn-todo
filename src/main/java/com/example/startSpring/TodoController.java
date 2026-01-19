@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/todos")
 public class TodoController {
@@ -20,12 +22,14 @@ public class TodoController {
     //Get all todos
 
     @GetMapping("/all")
-    public ResponseEntity<Todo> getAllTodos(){
+    public ResponseEntity<List<Todo>>getAllTodos(){
         try {
-            return new ResponseEntity<Todo>((Todo) todoService.getAllTodos(), HttpStatus.OK);
+            List<Todo> listOfTodos;
+            listOfTodos = todoService.getAllTodos();
+            return new ResponseEntity<>(listOfTodos, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error getting all todos: " + e.getMessage());
-            return new ResponseEntity<Todo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,6 +72,19 @@ public class TodoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    //update status of the todo
+    @PatchMapping("/{todoId}/status")
+    public ResponseEntity<Todo> updateTodoStatus(@PathVariable Long todoId, @RequestBody Todo todo) {
+        Todo updatedTodo = todoService.editTodoById(todoId, todo);
+        if (updatedTodo != null) {
+            return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+    }
+
 
 
     @DeleteMapping("/{todoId}")

@@ -1,6 +1,8 @@
 package com.example.startSpring.models;
 
 import jakarta.persistence.*; // The library for database mapping
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity // Tells Spring Boot: "This class is a table in MySQL"
@@ -15,9 +17,15 @@ public class Todo {
     @Column(nullable = false) // This column cannot be empty
     private String title;
 
+
     private boolean completed = false; // Default value is false
 
+    @Size(min = 5, max = 800)
     private String description;
+
+//    @Email
+//    private String email;
+
 
 //    // IMPORTANT: In Java, you need a default (empty) constructor for the DB to work
 //    public Todo() {}
@@ -37,5 +45,13 @@ public class Todo {
 //    public void setDescription(String description) { this.description = description; }
 
 
-
+//    public Todo(Long id, String title, boolean completed, String description) {
+//        this.id = id;
+//        this.title = title;
+//        this.completed = completed;
+//        this.description = description;
+//    }
+//
+//    public Todo() {
+//    }
 }

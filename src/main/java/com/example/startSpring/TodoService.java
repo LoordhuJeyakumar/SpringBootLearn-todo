@@ -80,6 +80,24 @@ public class TodoService {
         }
     }
 
+    //Update status of the todo
+    public Todo updateTodoStatus(Long id, Todo todo){
+        try{
+            Todo existingTodo;
+            existingTodo = todoRepository.findById(id).orElse(null);
+
+            if (existingTodo != null){
+                existingTodo.setCompleted(todo.isCompleted());
+                return todoRepository.save(existingTodo);
+            } else {
+                return null;
+            }
+        }catch (Exception e ){
+            System.out.println("Error editing todo: " + e.getMessage());
+            return null;
+        }
+    }
+
 
     //Delete todo
     public void deleteTodo(Long id){
