@@ -19,11 +19,18 @@
 package com.example.startSpring;
 
 import com.example.startSpring.models.Todo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class TodoService {
 
@@ -55,6 +62,19 @@ public class TodoService {
            System.out.println("Error getting all todos: " + e.getMessage());
            return null;
        }
+    }
+
+
+    //Get all todos with pagination
+    public Page<Todo> getAllTodosWithPagination (int page, int size, String sortBy){
+        try{
+            Pageable pageable = PageRequest.of(page, size , Sort.by(sortBy));
+            return todoRepository.findAll(pageable);
+        } catch (Exception e) {
+            log.error("Error getting all todos with pagination: " + e.getMessage());
+            return null;
+        }
+
     }
 
     //edit todo by id with error handling

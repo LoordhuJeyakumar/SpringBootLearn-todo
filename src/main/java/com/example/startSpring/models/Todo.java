@@ -1,7 +1,7 @@
 package com.example.startSpring.models;
 
 import jakarta.persistence.*; // The library for database mapping
-import jakarta.validation.constraints.Email;
+//import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
