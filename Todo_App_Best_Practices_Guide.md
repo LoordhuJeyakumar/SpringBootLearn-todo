@@ -105,17 +105,3 @@ Instead of `try-catch` blocks in every controller, use a `@ControllerAdvice` to 
 
 ---
 
-## 4. 🛠️ Tips for Teaching
-
-1.  **Start Simple**: Start with an in-memory list (using `ArrayList`) before connecting to a real database (H2 or MySQL). This isolates the logic learning from database complexity.
-2.  **Debug Mode**: Show students how to use breakpoints in the IDE to trace the flow from Controller -> Service -> Repository.
-3.  **Postman**: Teach them to use Postman or cURL to test APIs, as browsers can easily only test GET requests.
-
----
-
-## 5. Next Steps for Your Todo App
-
-1.  Create the **Model** (`Todo.java`).
-2.  Create a **Repository** interface.
-3.  Create a **Service** to handle logic.
-4.  Create a **Controller** to expose endpoints.

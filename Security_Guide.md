@@ -106,16 +106,3 @@ public class SecurityConfig {
 ```
 
 ---
-
-## 5. 🛠️ Tips for Teaching Security
-
-1.  **Start Unprotected**: First, show the students that all endpoints are public. Anyone can access `/api/todos`.
-2.  **Add Spring Security**: Add the dependency. Show them that **everything** is now locked by default (returns 401). This demonstrates Spring Security's "secure by default" principle.
-3.  **Open Up Login**: In `SecurityConfig`, explicitly permit access to `/api/auth/login` and `/api/auth/register`.
-4.  **Demonstrate the Flow**:
-    *   Use Postman to hit the `/register` endpoint to create a user.
-    *   Hit the `/login` endpoint to get a JWT.
-    *   Try to access `/api/todos` without the token (it will fail).
-    *   Access `/api/todos` again, but this time add the `Authorization: Bearer <token>` header (it will succeed).
-
-This step-by-step process makes the "magic" of security much easier to grasp.
