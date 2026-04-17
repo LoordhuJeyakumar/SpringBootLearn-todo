@@ -38,8 +38,8 @@ public class SecurityConfig {
 
             // Define URL access rules
             .authorizeHttpRequests(auth -> auth
-                // 1. Allow everyone to access login, register, and health check
-                .requestMatchers("/api/auth/**", "/api/health").permitAll()
+                // 1. Allow everyone to access root, login, register, and health check
+                .requestMatchers("/", "/api/auth/**", "/api/health", "/images/**", "/static/**", "/*.html", "/*.ico").permitAll()
                 
                 // 2. Allow everyone to see the Swagger API documentation
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
