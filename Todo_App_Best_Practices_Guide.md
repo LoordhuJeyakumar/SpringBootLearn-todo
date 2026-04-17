@@ -29,7 +29,8 @@ com.example.startSpring
 │   └── TodoController.java
 │
 ├── dto/                         (Data Transfer Objects - What clients see)
-│   └── TodoDTO.java
+│   ├── TodoDTO.java
+│   └── ApiResponse.java         (Standard Response Wrapper)
 │
 └── exception/                   (Global Error Handling)
     └── GlobalExceptionHandler.java
@@ -50,22 +51,29 @@ com.example.startSpring
 *   **Bad**: Returning the `User` entity which contains a `password` field directly to the frontend.
 *   **Good**: Create a `UserDTO` that only contains `username` and `email`, and return that.
 
-### 2. Dependency Injection
+### 2. Standardize API Responses
+Don't return different shapes of data. Use a wrapper like `ApiResponse<T>`:
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... }
+}
+```
+
+### 3. Dependency Injection
 Always use **Constructor Injection** instead of `@Autowired` on fields. It makes testing easier and ensures required dependencies are present.
 
 **Preferred Way:**
 ```java
 @Service
+@RequiredArgsConstructor // Lombok annotation to generate constructor
 public class TodoService {
     private final TodoRepository repository;
-
-    public TodoService(TodoRepository repository) {
-        this.repository = repository;
-    }
 }
 ```
 
-### 3. Proper HTTP Status Codes
+### 4. Proper HTTP Status Codes
 Don't just return 200 OK for everything.
 *   `200 OK`: Successful GET, PUT.
 *   `201 Created`: Successful POST (creation).
@@ -73,8 +81,8 @@ Don't just return 200 OK for everything.
 *   `400 Bad Request`: Validation failed.
 *   `404 Not Found`: Resource not found.
 
-### 4. Global Exception Handling
-Instead of `try-catch` blocks in every controller, use a `@ControllerAdvice` to handle errors globally.
+### 5. Global Exception Handling
+Instead of `try-catch` blocks in every controller, use a `@ControllerAdvice` to handle errors globally. This keeps your controllers clean.
 
 ---
 
@@ -105,3 +113,17 @@ Instead of `try-catch` blocks in every controller, use a `@ControllerAdvice` to 
 
 ---
 
+## 4. 🛠️ Tips for Teaching
+
+1.  **Start Simple**: Start with an in-memory list (using `ArrayList`) before connecting to a real database (H2 or MySQL). This isolates the logic learning from database complexity.
+2.  **Debug Mode**: Show students how to use breakpoints in the IDE to trace the flow from Controller -> Service -> Repository.
+3.  **Postman**: Teach them to use Postman or cURL to test APIs, as browsers can easily only test GET requests.
+
+---
+
+## 5. Next Steps for Your Todo App
+
+1.  Create the **Model** (`Todo.java`).
+2.  Create a **Repository** interface.
+3.  Create a **Service** to handle logic.
+4.  Create a **Controller** to expose endpoints.

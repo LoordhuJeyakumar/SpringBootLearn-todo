@@ -1,5 +1,6 @@
 package com.example.startSpring.controller;
 
+import com.example.startSpring.dto.ApiResponse;
 import com.example.startSpring.dto.AuthenticationRequest;
 import com.example.startSpring.dto.AuthenticationResponse;
 import com.example.startSpring.dto.RegisterRequest;
@@ -19,16 +20,20 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> register(
             @RequestBody RegisterRequest request
     ) {
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(
+                ApiResponse.success("User registered successfully", service.register(request))
+        );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        return ResponseEntity.ok(
+                ApiResponse.success("Login successful", service.authenticate(request))
+        );
     }
 }

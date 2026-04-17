@@ -42,7 +42,8 @@ Here’s how to structure the security-related code in your project:
 com.example.startSpring
 │
 ├── config/
-│   └── SecurityConfig.java      (Main security rules)
+│   ├── SecurityConfig.java      (Main security rules)
+│   └── ApplicationConfig.java   (Bean definitions like PasswordEncoder)
 │
 ├── controller/
 │   └── AuthController.java      (For /login and /register)
@@ -72,7 +73,7 @@ com.example.startSpring
 | Annotation / Class | Purpose |
 | :--- | :--- |
 | `@EnableWebSecurity` | Enables Spring's web security support. |
-| `@Configuration` | Marks a class as a source of bean definitions. |
+| `@EnableMethodSecurity` | Enables `@PreAuthorize` for RBAC. |
 | `SecurityFilterChain` | A bean that defines the main security rules, like which endpoints are public and which are protected. |
 | `PasswordEncoder` | A bean used to hash passwords before saving them. **Never store plain text passwords!** |
 | `AuthenticationManager` | The core component that processes an authentication request. |
@@ -85,6 +86,7 @@ This is where you define your security rules.
 ```java
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity // Enables @PreAuthorize
 public class SecurityConfig {
 
     @Bean
@@ -106,3 +108,22 @@ public class SecurityConfig {
 ```
 
 ---
+
+## 5. 🛠️ Tips for Teaching Security
+
+1.  **Start Unprotected**: First, show the students that all endpoints are public. Anyone can access `/api/todos`.
+2.  **Add Spring Security**: Add the dependency. Show them that **everything** is now locked by default (returns 401). This demonstrates Spring Security's "secure by default" principle.
+3.  **Open Up Login**: In `SecurityConfig`, explicitly permit access to `/api/auth/login` and `/api/auth/register`.
+4.  **Demonstrate the Flow**:
+    *   Use Postman to hit the `/register` endpoint to create a user.
+    *   Hit the `/login` endpoint to get a JWT.
+    *   Try to access `/api/todos` without the token (it will fail).
+    *   Access `/api/todos` again, but this time add the `Authorization: Bearer <token>` header (it will succeed).
+
+### Important Note on Roles
+Spring Security expects roles to start with `ROLE_`.
+In `User.java`, we handle this automatically:
+```java
+return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+```
+This allows `@PreAuthorize("hasRole('ADMIN')")` to work correctly.

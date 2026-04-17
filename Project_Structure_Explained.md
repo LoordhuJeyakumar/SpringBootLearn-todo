@@ -40,7 +40,7 @@ We organize code by **function** (what it does), not by random choice.
 *   **Purpose**: The business logic. This is where the actual work happens.
 *   **Analogy**: The chef in the kitchen. They take the raw ingredients (data) and cook the meal.
 *   **Files**:
-    *   `TodoService.java`: Contains logic like "Check if todo exists before deleting".
+    *   `TodoService.java`: Contains logic like "Check if todo exists before deleting" and "Only show users their own data".
     *   `AuthenticationService.java`: Handles registering users and generating tokens.
 
 ### `repository/` (The Pantry)
@@ -61,8 +61,13 @@ We organize code by **function** (what it does), not by random choice.
 *   **Purpose**: Data Transfer Objects. Simple objects used to send data back and forth.
 *   **Why?**: We don't want to expose our full database entity (like passwords) to the user.
 *   **Files**:
-    *   `RegisterRequest.java`: Only contains `username` and `password`.
-    *   `AuthenticationResponse.java`: Only contains the `token`.
+    *   `RegisterRequest.java`: Only contains `username`, `password`, and `role`.
+    *   `ApiResponse.java`: A standard wrapper for all responses (`success`, `message`, `data`).
+
+### `exception/` (The Complaint Department)
+*   **Purpose**: Handles errors globally.
+*   **Files**:
+    *   `GlobalExceptionHandler.java`: Catches errors (like "User not found" or "Validation failed") and returns a nice JSON response.
 
 ### `security/` (The Bouncer)
 *   **Purpose**: Handles security logic.
@@ -78,10 +83,10 @@ When a user wants to **Create a Todo**:
 
 1.  **Request**: User sends `POST /api/v1/todos` with JSON data.
 2.  **Security**: `JwtAuthenticationFilter` checks if the user is logged in.
-3.  **Controller**: `TodoController` receives the request.
-4.  **Service**: `TodoService` validates the data.
+3.  **Controller**: `TodoController` receives the request and checks validation (`@Valid`).
+4.  **Service**: `TodoService` links the Todo to the current User.
 5.  **Repository**: `TodoRepository` saves it to the MySQL database.
-6.  **Response**: The saved Todo is returned to the user.
+6.  **Response**: The saved Todo is wrapped in `ApiResponse` and returned to the user.
 
 ---
 
@@ -95,3 +100,4 @@ When a user wants to **Create a Todo**:
 | `model` | Database Tables | Ingredients |
 | `dto` | API Data Format | Menu |
 | `config` | App Setup | Restaurant Manager |
+| `exception` | Error Handling | Complaint Dept |
